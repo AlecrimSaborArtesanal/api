@@ -1,21 +1,21 @@
-### Criação do ambiente virtual
+# Criação do ambiente virtual
 
-##### Instalação da bib:
+#### Instalação da bib:
 
-pip install virtualenv
+`pip install virtualenv`
 
-##### Criação do ambiente:
+#### Criação do ambiente:
 
-virtualenv -p python3 (nomedavenv)
+`virtualenv -p python3 (nomedavenv)`
 
-##### Ativação do ambiente:
+#### Ativação do ambiente:
 
-(nomedavirtualenv)\Scripts\activate
+`(nomedavirtualenv)\Scripts\activate`
 
-##### Instalando dependências do projeto:
+#### Instalando dependências do projeto:
 
-pip install -r requirements.txt.
+`pip install -r requirements.txt.`
 
-##### Desativar ambiente virtual:
+#### Desativar ambiente virtual:
 
-deactivate
+`deactivate`
