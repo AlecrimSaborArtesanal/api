@@ -503,6 +503,64 @@ def delete_by_id_vendas_produto(id):
     mydb.commit()
     return jsonify({'mensagem': 'Registro excluído com sucesso'})
 
+################################### ROTAS DE FICHA TECNICA LOTE PROCESSADO ###################################
+
+# Todos os itens do ficha_tecnica_lote
+
+
+@app.route('/ficha_tecnica_lote', methods=['GET'])
+def get_ficha_tecnica_lote():
+    cursor.execute("SELECT * FROM ficha_tecnica_lote_processado")
+    result = cursor.fetchall()
+    return jsonify(result)
+
+
+# Item do ficha_tecnica_lote por id
+
+
+@app.route('/ficha_tecnica_lote/<int:id>', methods=['GET'])
+def get_by_id_ficha_tecnica_lote(id):
+    cursor.execute(
+        "SELECT * FROM ficha_tecnica_lote_processado WHERE id = %s", id)
+    item = cursor.fetchone()
+    if item is None:
+        return jsonify({'mensagem': 'Registro não encontrado'}), 404
+    return jsonify(item)
+
+
+# Adicionar item em ficha_tecnica_lote
+
+
+@app.route('/ficha_tecnica_lote', methods=['POST'])
+def post_ficha_tecnica_lote():
+    data = request.get_json()
+    cursor.execute("INSERT INTO ficha_tecnica_lote_processado (id_estoque, id_lote, rendimento, obs_item, quantidade, tempo_preparo) VALUES (%s, %s, %s, %s, %s, %s)",
+                   (data['id_estoque'], data['id_lote'], data['rendimento'], data['obs_item'], data['quantidade'], data['tempo_preparo'],))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro adicionado com sucesso ao ficha_tecnica_lote_processado'})
+
+
+# Atualizar item em ficha_tecnica_lote
+
+
+@app.route('/ficha_tecnica_lote/<int:id>', methods=['PUT'])
+def edit_by_id_ficha_tecnica_lote(id):
+    data = request.get_json()
+    cursor.execute("UPDATE ficha_tecnica_lote_processado SET id_estoque=%s, id_lote=%s, rendimento=%s, obs_item=%s, quantidade=%s, tempo_preparo=%s",
+                   ({data['id_estoque'], data['id_lote'], data['rendimento'], data['obs_item'], data['quantidade'], data['tempo_preparo'], id}))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro atualizado com sucesso'})
+
+# Excluir um item das ficha_tecnica_lote
+
+
+@app.route('/ficha_tecnica_lote/<int:id>', methods=['DELETE'])
+def delete_by_id_ficha_tecnica_lote(id):
+    cursor.execute(
+        "DELETE FROM ficha_tecnica_lote_processado WHERE id = %s", (id,))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro excluído com sucesso'})
+
 
 # Iniciando aplicação Flask
 if __name__ == '__main__':
