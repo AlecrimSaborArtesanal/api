@@ -323,7 +323,7 @@ def post_compras():
 @app.route('/compras/<int:id>', methods=['PUT'])
 def edit_by_id_compras(id):
     data = request.get_json()
-    cursor.execute("UPDATE compras SET id=%s, nome=%s, quantidade=%s",
+    cursor.execute("UPDATE compras SET id=%s, data=%s, id_caixa=%s, forma_pagamento=%s",
                    ({data['id'], data['data'], data['id_caixa'], data['prazo'], data['forma_pagamento'], id}))
     mydb.commit()
     return jsonify({'mensagem': 'Registro atualizado com sucesso'})
@@ -334,6 +334,62 @@ def edit_by_id_compras(id):
 @app.route('/compras/<int:id>', methods=['DELETE'])
 def delete_by_id_compras(id):
     cursor.execute("DELETE FROM compras WHERE id = %s", (id,))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro excluído com sucesso'})
+
+
+################################### ROTAS DE COMPRAS ITENS ###################################
+
+# Todos os itens de compras_itens
+
+
+@app.route('/compras_itens', methods=['GET'])
+def get_compras_itens():
+    cursor.execute("SELECT * FROM compras_itens")
+    result = cursor.fetchall()
+    return jsonify(result)
+
+# Item do compras_itens por id
+
+
+@app.route('/compras_itens/<int:id>', methods=['GET'])
+def get_by_id_compras_itens(id):
+    cursor.execute("SELECT * FROM compras_itens WHERE id = %s", id)
+    item = cursor.fetchone()
+    if item is None:
+        return jsonify({'mensagem': 'Registro não encontrado'}), 404
+    return jsonify(item)
+
+
+# Adicionar item em compras_itens
+
+
+@app.route('/compras_itens', methods=['POST'])
+def post_compras_itens():
+    data = request.get_json()
+    cursor.execute("INSERT INTO compras_itens (id_compra, id_estoque, quantidade, custo_unitario) VALUES (%s, %s, %s, %s)",
+                   (data['id_compra'], data['id_estoque'], data['quantidade'], data['custo_unitario'],))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro adicionado com sucesso a compras_itens'})
+
+
+# Atualizar item em compras_itens
+
+
+@app.route('/compras_itens/<int:id>', methods=['PUT'])
+def edit_by_id_compras_itens(id):
+    data = request.get_json()
+    cursor.execute("UPDATE compras_itens SET id_compra=%s, id_estoque=%s, quantidade=%s, custo_unitario=%s",
+                   ({data['id_compra'], data['id_estoque'], data['quantidade'], data['custo_unitario'], id}))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro atualizado com sucesso'})
+
+# Excluir um item das compras_itens
+
+
+@app.route('/compras_itens/<int:id>', methods=['DELETE'])
+def delete_by_id_compras_itens(id):
+    cursor.execute("DELETE FROM compras_itens WHERE id = %s", (id,))
     mydb.commit()
     return jsonify({'mensagem': 'Registro excluído com sucesso'})
 
