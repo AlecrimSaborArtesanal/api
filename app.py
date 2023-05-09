@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import mysql.connector
+from routes.cardapio import delete_by_id_cardapio, edit_by_id_cardapio, get_cardapio, get_by_id_cardapio, post_cardapio
 
 try:
     mydb = mysql.connector.connect(
@@ -19,56 +20,40 @@ cursor = mydb.cursor()
 
 ################################### ROTAS DE CARDAPIO ###################################
 
-# Todos itens do cardapio
+# GET ALL
 
 
 @app.route('/cardapio', methods=['GET'])
-def get_cardapio():
-    cursor.execute("SELECT * FROM cardapio")
-    result = cursor.fetchall()
-    return jsonify(result)
+def get_cardapio_route():
+    return get_cardapio(cursor)
 
-# Item do cardapio por id
+# GET BY ID
 
 
 @app.route('/cardapio/<int:id>', methods=['GET'])
-def get_by_id_cardapio(id):
-    cursor.execute("SELECT * FROM cardapio WHERE id = %s", (id,))
-    item = cursor.fetchone()
-    if item is None:
-        return jsonify({'mensagem': 'Registro não encontrado'}), 404
-    return jsonify(item)
+def get_by_id_cardapio_route(id):
+    return get_by_id_cardapio(cursor, id)
 
-# Adicionar item no cardapio
+# POST
 
 
 @app.route('/cardapio', methods=['POST'])
-def post_cardapio():
-    data = request.get_json()
-    cursor.execute("INSERT INTO cardapio (id, nome, categoria) VALUES (%s, %s, %s)",
-                   (data['id'], data['nome'], data['categoria']))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro adicionado com sucesso ao cardápio'})
+def post_cardapio_route():
+    return post_cardapio(mydb, cursor)
 
+# PUT
 
-# Atualizar um item do cardapio
 
 @app.route('/cardapio/<int:id>', methods=['PUT'])
-def edit_by_id_cardapio(id):
-    data = request.get_json()
-    cursor.execute("UPDATE cardapio SET id=%s, nome=%s, categoria=%s WHERE id=%s",
-                   (data['id'], data['nome'], data['categoria'], id))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro atualizado com sucesso'})
+def edit_by_id_cardapio_route(id):
+    return edit_by_id_cardapio(mydb, cursor, id)
 
-# Excluir um item do cardapio
+# DELETE
 
 
 @app.route('/cardapio/<int:id>', methods=['DELETE'])
-def delete_by_id_cardapio(id):
-    cursor.execute("DELETE FROM cardapio WHERE id = %s", (id,))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro excluído com sucesso'})
+def delete_by_id_cardapio_route(id):
+    return delete_by_id_cardapio(mydb, cursor, id)
 
 
 ################################### ROTAS DE CAIXA ###################################
