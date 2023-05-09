@@ -229,6 +229,60 @@ def delete_by_id_estoque(id):
     mydb.commit()
     return jsonify({'mensagem': 'Registro excluído com sucesso'})
 
+################################### ROTAS DE ESTOQUE LOTE PROCESSADO ###################################
+
+# Todos os itens do estoque_lote
+
+
+@app.route('/estoque_lote', methods=['GET'])
+def get_estoque_lote():
+    cursor.execute("SELECT * FROM estoque_lote_processado")
+    result = cursor.fetchall()
+    return jsonify(result)
+
+# Item do estoque por id
+
+
+@app.route('/estoque_lote/<int:id>', methods=['GET'])
+def get_by_id_estoque_lote(id):
+    cursor.execute("SELECT * FROM estoque_lote_processado WHERE id = %s", id)
+    item = cursor.fetchone()
+    if item is None:
+        return jsonify({'mensagem': 'Registro não encontrado'}), 404
+    return jsonify(item)
+
+# Adicionar item em estoque_lote
+
+
+@app.route('/estoque_lote', methods=['POST'])
+def post_estoque_lote():
+    data = request.get_json()
+    cursor.execute("INSERT INTO estoque_lote_processado (id, nome, quantidade) VALUES (%s, %s, %s)",
+                   (data['id'], data['nome'], data['quantidade'],))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro adicionado com sucesso ao estoque'})
+
+# Atualizar item em estoque_lote
+
+
+@app.route('/estoque_lote/<int:id>', methods=['PUT'])
+def edit_by_id_estoque_lote(id):
+    data = request.get_json()
+    cursor.execute("UPDATE estoque_lote_processado SET id=%s, nome=%s, quantidade=%s",
+                   ({data['id'], data['nome'], data['quantidade'], id}))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro atualizado com sucesso'})
+
+
+# Excluir um item das estoque_lote
+
+
+@app.route('/estoque_lote/<int:id>', methods=['DELETE'])
+def delete_by_id_estoque_lote(id):
+    cursor.execute("DELETE FROM estoque_lote_processado WHERE id = %s", (id,))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro excluído com sucesso'})
+
 
 # Iniciando aplicação Flask
 if __name__ == '__main__':
