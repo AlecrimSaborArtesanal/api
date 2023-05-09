@@ -394,6 +394,116 @@ def delete_by_id_compras_itens(id):
     return jsonify({'mensagem': 'Registro excluído com sucesso'})
 
 
+################################### ROTAS DE FICHA TECNICA ###################################
+
+# Todos os itens do ficha_tecnica
+
+
+@app.route('/ficha_tecnica', methods=['GET'])
+def get_ficha_tecnica():
+    cursor.execute("SELECT * FROM ficha_tecnica")
+    result = cursor.fetchall()
+    return jsonify(result)
+
+# Item do ficha_tecnica por id
+
+
+@app.route('/ficha_tecnica/<int:id>', methods=['GET'])
+def get_by_id_ficha_tecnica(id):
+    cursor.execute("SELECT * FROM ficha_tecnica WHERE id = %s", id)
+    item = cursor.fetchone()
+    if item is None:
+        return jsonify({'mensagem': 'Registro não encontrado'}), 404
+    return jsonify(item)
+
+# Adicionar item em ficha_tecnica
+
+
+@app.route('/ficha_tecnica', methods=['POST'])
+def post_ficha_tecnica():
+    data = request.get_json()
+    cursor.execute("INSERT INTO ficha_tecnica (id_estoque, id_cardapio, id_lote, obs_item, descricao, quantidade, tempo_preparo) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                   (data['id_estoque'], data['id_cardapio'], data['id_lote'], data['obs_item'], data['descricao'], data['quantidade'], data['tempo_preparo'],))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro adicionado com sucesso a ficha_tecnica'})
+
+
+# Atualizar item em ficha_tecnica
+
+
+@app.route('/ficha_tecnica/<int:id>', methods=['PUT'])
+def edit_by_id_ficha_tecnica(id):
+    data = request.get_json()
+    cursor.execute("UPDATE ficha_tecnica SET id_estoque=%s, id_cardapio=%s, id_lote=%s,obs_item=%s, descricao=%s, quantidade=%s, tempo_preparo=%s",
+                   ({data['id_estoque'], data['id_cardapio'], data['id_lote'], data['obs_item'], data['descricao'], data['quantidade'], data['tempo_preparo'], id}))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro atualizado com sucesso'})
+
+# Excluir um item das estoque
+
+
+@app.route('/ficha_tecnica/<int:id>', methods=['DELETE'])
+def delete_by_id_ficha_tecnica(id):
+    cursor.execute("DELETE FROM ficha_tecnica WHERE id = %s", (id,))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro excluído com sucesso'})
+
+
+################################### ROTAS DE VENDAS PRODUTOS ###################################
+
+# Todos os itens do vendas_produto
+
+
+@app.route('/vendas_produto', methods=['GET'])
+def get_vendas_produto():
+    cursor.execute("SELECT * FROM vendas_produto")
+    result = cursor.fetchall()
+    return jsonify(result)
+
+# Item do vendas_produto por id
+
+
+@app.route('/vendas_produto/<int:id>', methods=['GET'])
+def get_by_id_vendas_produto(id):
+    cursor.execute("SELECT * FROM vendas_produto WHERE id = %s", id)
+    item = cursor.fetchone()
+    if item is None:
+        return jsonify({'mensagem': 'Registro não encontrado'}), 404
+    return jsonify(item)
+
+
+# Adicionar item em vendas_produto
+
+
+@app.route('/vendas_produto', methods=['POST'])
+def post_vendas_produto():
+    data = request.get_json()
+    cursor.execute("INSERT INTO vendas_produto (id_venda, id_cardapio, quantidade, forma_pagamento, hora, data) VALUES (%s, %s, %s, %s, %s, %s)",
+                   (data['id_venda'], data['id_cardapio'], data['quantidade'], data['forma_pagamento'], data['hora'], data['data'],))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro adicionado com sucesso ao vendas_produto'})
+
+# Atualizar item em vendas_produto
+
+
+@app.route('/vendas_produto/<int:id>', methods=['PUT'])
+def edit_by_id_vendas_produto(id):
+    data = request.get_json()
+    cursor.execute("UPDATE vendas_produto SET id_venda=%s, id_cardapio=%s, quantidade=%s, forma_pagamento=%s, hora=%s, data=%s",
+                   ({data['id_venda'], data['id_cardapio'], data['quantidade'], data['forma_pagamento'], data['hora'], data['data'], id}))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro atualizado com sucesso'})
+
+# Excluir um item das vendas_produto
+
+
+@app.route('/vendas_produto/<int:id>', methods=['DELETE'])
+def delete_by_id_vendas_produto(id):
+    cursor.execute("DELETE FROM vendas_produto WHERE id = %s", (id,))
+    mydb.commit()
+    return jsonify({'mensagem': 'Registro excluído com sucesso'})
+
+
 # Iniciando aplicação Flask
 if __name__ == '__main__':
     app.run(debug=True)
