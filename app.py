@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import mysql.connector
 from routes.cardapio import delete_by_id_cardapio, edit_by_id_cardapio, get_cardapio, get_by_id_cardapio, post_cardapio
 
+
 try:
     mydb = mysql.connector.connect(
         host="localhost",
@@ -11,7 +12,7 @@ try:
     )
     print('~*~*~*~*~*~*~*~* Conexão com banco de dados bem sucedida. ~*~*~*~*~*~*~*~*~*')
 except:
-    print('ERRO! Conexão com banco de dados não sucedida.')
+    print('!!! [ERRO!] Conexão com banco de dados não sucedida. !!!')
 
 app = Flask(__name__)
 
