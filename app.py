@@ -10,9 +10,9 @@ try:
         password="123456",
         database="alecrim_normalized"
     )
-    print('~*~*~*~*~*~*~*~* Conexão com banco de dados bem sucedida. ~*~*~*~*~*~*~*~*~*')
+    print('~*~*~* [OK] Conexão com banco de dados bem sucedida. *~*~*~')
 except:
-    print('!!! [ERRO!] Conexão com banco de dados não sucedida. !!!')
+    print('!!! [ERRO] Conexão com banco de dados não sucedida. !!!')
 
 app = Flask(__name__)
 
