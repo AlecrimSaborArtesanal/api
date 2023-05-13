@@ -198,8 +198,8 @@ def post_estoque_lote_route():
 
 
 @app.route('/estoque_lote/<int:id>', methods=['PUT'])
-def delete_by_id_estoque_lote_route(id):
-    return delete_by_id_estoque_lote(mydb, cursor, id)
+def edit_by_id_estoque_lote_route(id):
+    return edit_by_id_estoque_lote(mydb, cursor, id)
 
 
 # DELETE
