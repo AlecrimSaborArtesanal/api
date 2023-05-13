@@ -6,6 +6,8 @@ from routes.vendas import delete_by_id_vendas, edit_by_id_vendas, get_vendas, ge
 from routes.estoque import delete_by_id_estoque, edit_by_id_estoque, get_estoque, get_by_id_estoque, post_estoque
 from routes.estoque_lote import delete_by_id_estoque_lote, edit_by_id_estoque_lote, get_estoque_lote, get_by_id_estoque_lote, post_estoque_lote
 from routes.compras import delete_by_id_compras, edit_by_id_compras, get_compras, get_by_id_compras, post_compras
+from routes.compras_itens import delete_by_id_compras_itens, edit_by_id_compras_itens, get_compras_itens, get_by_id_compras_itens, post_compras_itens
+from routes.ficha_tecnica import delete_by_id_ficha_tecnica, edit_by_id_ficha_tecnica, get_ficha_tecnica, get_by_id_ficha_tecnica, post_ficha_tecnica
 
 
 try:
@@ -249,58 +251,42 @@ def delete_by_id_compras_route(id):
 
 ################################### ROTAS DE COMPRAS ITENS ###################################
 
-# Todos os itens de compras_itens
+# GET ALL
 
 
 @app.route('/compras_itens', methods=['GET'])
-def get_compras_itens():
-    cursor.execute("SELECT * FROM compras_itens")
-    result = cursor.fetchall()
-    return jsonify(result)
+def get_compras_itens_route():
+    return get_compras_itens(cursor)
 
-# Item do compras_itens por id
+# GET BY ID
 
 
 @app.route('/compras_itens/<int:id>', methods=['GET'])
-def get_by_id_compras_itens(id):
-    cursor.execute("SELECT * FROM compras_itens WHERE id = %s", id)
-    item = cursor.fetchone()
-    if item is None:
-        return jsonify({'mensagem': 'Registro não encontrado'}), 404
-    return jsonify(item)
+def get_by_id_compras_itens_route(id):
+    return get_by_id_compras_itens(cursor, id)
 
 
-# Adicionar item em compras_itens
+# POST
 
 
 @app.route('/compras_itens', methods=['POST'])
-def post_compras_itens():
-    data = request.get_json()
-    cursor.execute("INSERT INTO compras_itens (id_compra, id_estoque, quantidade, custo_unitario) VALUES (%s, %s, %s, %s)",
-                   (data['id_compra'], data['id_estoque'], data['quantidade'], data['custo_unitario'],))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro adicionado com sucesso a compras_itens'})
+def post_compras_itens_route():
+    return post_compras_itens(mydb, cursor)
 
 
-# Atualizar item em compras_itens
+# PUT
 
 
 @app.route('/compras_itens/<int:id>', methods=['PUT'])
-def edit_by_id_compras_itens(id):
-    data = request.get_json()
-    cursor.execute("UPDATE compras_itens SET id_compra=%s, id_estoque=%s, quantidade=%s, custo_unitario=%s",
-                   ({data['id_compra'], data['id_estoque'], data['quantidade'], data['custo_unitario'], id}))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro atualizado com sucesso'})
+def edit_by_id_compras_itens_route(id):
+    return edit_by_id_compras_itens(mydb, cursor, id)
 
-# Excluir um item das compras_itens
+# DELETE
 
 
 @app.route('/compras_itens/<int:id>', methods=['DELETE'])
-def delete_by_id_compras_itens(id):
-    cursor.execute("DELETE FROM compras_itens WHERE id = %s", (id,))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro excluído com sucesso'})
+def delete_by_id_compras_itens_route(id):
+    return delete_by_id_compras_itens(mydb, cursor, id)
 
 
 ################################### ROTAS DE FICHA TECNICA ###################################
@@ -309,53 +295,37 @@ def delete_by_id_compras_itens(id):
 
 
 @app.route('/ficha_tecnica', methods=['GET'])
-def get_ficha_tecnica():
-    cursor.execute("SELECT * FROM ficha_tecnica")
-    result = cursor.fetchall()
-    return jsonify(result)
+def get_ficha_tecnica_route():
+    return get_ficha_tecnica(cursor)
 
 # Item do ficha_tecnica por id
 
 
 @app.route('/ficha_tecnica/<int:id>', methods=['GET'])
-def get_by_id_ficha_tecnica(id):
-    cursor.execute("SELECT * FROM ficha_tecnica WHERE id = %s", id)
-    item = cursor.fetchone()
-    if item is None:
-        return jsonify({'mensagem': 'Registro não encontrado'}), 404
-    return jsonify(item)
+def get_by_id_ficha_tecnica_route(id):
+    return get_by_id_ficha_tecnica(cursor, id)
 
 # Adicionar item em ficha_tecnica
 
 
 @app.route('/ficha_tecnica', methods=['POST'])
-def post_ficha_tecnica():
-    data = request.get_json()
-    cursor.execute("INSERT INTO ficha_tecnica (id_estoque, id_cardapio, id_lote, obs_item, descricao, quantidade, tempo_preparo) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-                   (data['id_estoque'], data['id_cardapio'], data['id_lote'], data['obs_item'], data['descricao'], data['quantidade'], data['tempo_preparo'],))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro adicionado com sucesso a ficha_tecnica'})
+def post_ficha_tecnica_route():
+    return post_ficha_tecnica(mydb, cursor)
 
 
 # Atualizar item em ficha_tecnica
 
 
 @app.route('/ficha_tecnica/<int:id>', methods=['PUT'])
-def edit_by_id_ficha_tecnica(id):
-    data = request.get_json()
-    cursor.execute("UPDATE ficha_tecnica SET id_estoque=%s, id_cardapio=%s, id_lote=%s,obs_item=%s, descricao=%s, quantidade=%s, tempo_preparo=%s",
-                   ({data['id_estoque'], data['id_cardapio'], data['id_lote'], data['obs_item'], data['descricao'], data['quantidade'], data['tempo_preparo'], id}))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro atualizado com sucesso'})
+def edit_by_id_ficha_tecnica_route(id):
+    return edit_by_id_ficha_tecnica(mydb, cursor, id)
 
-# Excluir um item das estoque
+# Excluir um item das ficha_tecnica
 
 
 @app.route('/ficha_tecnica/<int:id>', methods=['DELETE'])
-def delete_by_id_ficha_tecnica(id):
-    cursor.execute("DELETE FROM ficha_tecnica WHERE id = %s", (id,))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro excluído com sucesso'})
+def delete_by_id_ficha_tecnica_route(id):
+    return delete_by_id_ficha_tecnica(mydb, cursor, id)
 
 
 ################################### ROTAS DE VENDAS PRODUTOS ###################################
