@@ -291,21 +291,21 @@ def delete_by_id_compras_itens_route(id):
 
 ################################### ROTAS DE FICHA TECNICA ###################################
 
-# Todos os itens do ficha_tecnica
+# GET
 
 
 @app.route('/ficha_tecnica', methods=['GET'])
 def get_ficha_tecnica_route():
     return get_ficha_tecnica(cursor)
 
-# Item do ficha_tecnica por id
+# GET BY ID
 
 
 @app.route('/ficha_tecnica/<int:id>', methods=['GET'])
 def get_by_id_ficha_tecnica_route(id):
     return get_by_id_ficha_tecnica(cursor, id)
 
-# Adicionar item em ficha_tecnica
+# POST
 
 
 @app.route('/ficha_tecnica', methods=['POST'])
@@ -313,14 +313,14 @@ def post_ficha_tecnica_route():
     return post_ficha_tecnica(mydb, cursor)
 
 
-# Atualizar item em ficha_tecnica
+# PUT
 
 
 @app.route('/ficha_tecnica/<int:id>', methods=['PUT'])
 def edit_by_id_ficha_tecnica_route(id):
     return edit_by_id_ficha_tecnica(mydb, cursor, id)
 
-# Excluir um item das ficha_tecnica
+# DELETE
 
 
 @app.route('/ficha_tecnica/<int:id>', methods=['DELETE'])
@@ -328,7 +328,7 @@ def delete_by_id_ficha_tecnica_route(id):
     return delete_by_id_ficha_tecnica(mydb, cursor, id)
 
 
-################################### ROTAS DE VENDAS PRODUTOS ###################################
+################################### ROTAS DE VENDAS PRODUTO ###################################
 
 # Todos os itens do vendas_produto
 
