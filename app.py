@@ -3,6 +3,9 @@ import mysql.connector
 from routes.cardapio import delete_by_id_cardapio, edit_by_id_cardapio, get_cardapio, get_by_id_cardapio, post_cardapio
 from routes.caixa import delete_by_id_caixa, edit_by_id_caixa, get_caixa, get_by_id_caixa, post_caixa
 from routes.vendas import delete_by_id_vendas, edit_by_id_vendas, get_vendas, get_by_id_vendas, post_vendas
+from routes.estoque import delete_by_id_estoque, edit_by_id_estoque, get_estoque, get_by_id_estoque, post_estoque
+from routes.estoque_lote import delete_by_id_estoque_lote, edit_by_id_estoque_lote, get_estoque_lote, get_by_id_estoque_lote, post_estoque_lote
+from routes.compras import delete_by_id_compras, edit_by_id_compras, get_compras, get_by_id_compras, post_compras
 
 
 try:
@@ -62,7 +65,6 @@ def delete_by_id_cardapio_route(id):
 ################################### ROTAS DE CAIXA ###################################
 
 #  GET ALL
-
 @app.route('/caixa', methods=['GET'])
 def get_caixa_route():
     return get_caixa(cursor)
@@ -98,34 +100,34 @@ def delete_by_id_caixa_route(id):
 
 ################################### ROTAS DE VENDAS ###################################
 
-# Todos itens do vendas
+# GET ALL
 
 @app.route('/vendas', methods=['GET'])
 def get_vendas_route():
     return get_vendas(cursor)
 
-# Item de vendas por id
+# GET BY ID
 
 
 @app.route('/vendas/<int:id>', methods=['GET'])
 def get_by_id_vendas_route(id):
     return get_by_id_vendas(cursor, id)
 
-# Adicionar item em vendas
+# POST
 
 
 @app.route('/vendas', methods=['POST'])
 def post_vendas_route():
     return post_vendas(mydb, cursor)
 
-# Atualizar um item das vendas
+# PUT
 
 
 @app.route('/vendas/<int:id>', methods=['PUT'])
 def edit_by_id_vendas_route(id):
     return edit_by_id_vendas(mydb, cursor, id)
 
-# Excluir um item das vendas
+# DELETE
 
 
 @app.route('/vendas/<int:id>', methods=['DELETE'])
@@ -134,110 +136,78 @@ def delete_by_id_vendas_route(id):
 
 ################################### ROTAS DE ESTOQUE ###################################
 
-# Todos os itens do estoque
+# GET ALL
 
 
 @app.route('/estoque', methods=['GET'])
-def get_estoque():
-    cursor.execute("SELECT * FROM estoque")
-    result = cursor.fetchall()
-    return jsonify(result)
+def get_estoque_route():
+    return get_estoque(cursor)
 
-# Item do estoque por id
+# GET BY ID
 
 
 @app.route('/estoque/<int:id>', methods=['GET'])
-def get_by_id_estoque(id):
-    cursor.execute("SELECT * FROM estoque WHERE id = %s", id)
-    item = cursor.fetchone()
-    if item is None:
-        return jsonify({'mensagem': 'Registro não encontrado'}), 404
-    return jsonify(item)
+def get_by_id_estoque_route(id):
+    return get_by_id_estoque(cursor, id)
 
-# Adicionar item em estoque
+# POST
 
 
 @app.route('/estoque', methods=['POST'])
-def post_estoque():
-    data = request.get_json()
-    cursor.execute("INSERT INTO estoque (id, nome, quantidade, unidade) VALUES (%s, %s, %s, %s)",
-                   (data['id'], data['nome'], data['quantidade'], data['unidade'],))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro adicionado com sucesso ao estoque'})
+def post_estoque_route():
+    return post_estoque(mydb, cursor)
 
-# Atualizar item em estoque
+# PUT
 
 
 @app.route('/estoque/<int:id>', methods=['PUT'])
-def edit_by_id_estoque(id):
-    data = request.get_json()
-    cursor.execute("UPDATE estoque SET id=%s, nome=%s, quantidade=%s, unidade=%s",
-                   ({data['id'], data['nome'], data['quantidade'], data['unidade'], id}))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro atualizado com sucesso'})
+def edit_by_id_estoque_route(id):
+    return edit_by_id_estoque(mydb, cursor, id)
 
-# Excluir um item das estoque
+# DELETE
 
 
 @app.route('/estoque/<int:id>', methods=['DELETE'])
-def delete_by_id_estoque(id):
-    cursor.execute("DELETE FROM estoque WHERE id = %s", (id,))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro excluído com sucesso'})
+def delete_by_id_estoque_route(id):
+    return delete_by_id_estoque(mydb, cursor, id)
 
 ################################### ROTAS DE ESTOQUE LOTE PROCESSADO ###################################
 
-# Todos os itens do estoque_lote
+# GET ALL
 
 
 @app.route('/estoque_lote', methods=['GET'])
-def get_estoque_lote():
-    cursor.execute("SELECT * FROM estoque_lote_processado")
-    result = cursor.fetchall()
-    return jsonify(result)
+def get_estoque_lote_route():
+    return get_estoque_lote(cursor)
 
-# Item do estoque_lote por id
+# GET BY ID
 
 
 @app.route('/estoque_lote/<int:id>', methods=['GET'])
-def get_by_id_estoque_lote(id):
-    cursor.execute("SELECT * FROM estoque_lote_processado WHERE id = %s", id)
-    item = cursor.fetchone()
-    if item is None:
-        return jsonify({'mensagem': 'Registro não encontrado'}), 404
-    return jsonify(item)
+def get_by_id_estoque_lote_route(id):
+    return get_by_id_estoque_lote(cursor, id)
 
-# Adicionar item em estoque_lote
+# POST
 
 
 @app.route('/estoque_lote', methods=['POST'])
-def post_estoque_lote():
-    data = request.get_json()
-    cursor.execute("INSERT INTO estoque_lote_processado (id, nome, quantidade) VALUES (%s, %s, %s)",
-                   (data['id'], data['nome'], data['quantidade'],))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro adicionado com sucesso ao estoque_lote_processado'})
+def post_estoque_lote_route():
+    return post_estoque_lote(mydb, cursor)
 
-# Atualizar item em estoque_lote
+# PUT
 
 
 @app.route('/estoque_lote/<int:id>', methods=['PUT'])
-def edit_by_id_estoque_lote(id):
-    data = request.get_json()
-    cursor.execute("UPDATE estoque_lote_processado SET id=%s, nome=%s, quantidade=%s",
-                   ({data['id'], data['nome'], data['quantidade'], id}))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro atualizado com sucesso'})
+def delete_by_id_estoque_lote_route(id):
+    return delete_by_id_estoque_lote(mydb, cursor, id)
 
 
-# Excluir um item das estoque_lote
+# DELETE
 
 
 @app.route('/estoque_lote/<int:id>', methods=['DELETE'])
-def delete_by_id_estoque_lote(id):
-    cursor.execute("DELETE FROM estoque_lote_processado WHERE id = %s", (id,))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro excluído com sucesso'})
+def delete_by_id_estoque_lote_route(id):
+    return delete_by_id_estoque_lote(mydb, cursor, id)
 
 
 ################################### ROTAS DE COMPRAS ###################################
@@ -246,52 +216,36 @@ def delete_by_id_estoque_lote(id):
 
 
 @app.route('/compras', methods=['GET'])
-def get_compras():
-    cursor.execute("SELECT * FROM compras")
-    result = cursor.fetchall()
-    return jsonify(result)
+def get_compras_route():
+    return get_compras(cursor)
 
 # Item de compras por id
 
 
 @app.route('/compras/<int:id>', methods=['GET'])
-def get_by_id_compras(id):
-    cursor.execute("SELECT * FROM compras WHERE id = %s", id)
-    item = cursor.fetchone()
-    if item is None:
-        return jsonify({'mensagem': 'Registro não encontrado'}), 404
-    return jsonify(item)
+def get_by_id_compras_route(id):
+    return get_by_id_compras(cursor, id)
 
 # Adicionar item em compras
 
 
 @app.route('/compras', methods=['POST'])
-def post_compras():
-    data = request.get_json()
-    cursor.execute("INSERT INTO compras (id, data, id_caixa, prazo, forma_pagamento) VALUES (%s, %s, %s, %s, %s)",
-                   (data['id'], data['data'], data['id_caixa'], data['prazo'], data['forma_pagamento'],))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro adicionado com sucesso à compras'})
+def post_compras_route():
+    return post_compras(mydb, cursor)
 
 # Atualizar item em compras
 
 
 @app.route('/compras/<int:id>', methods=['PUT'])
-def edit_by_id_compras(id):
-    data = request.get_json()
-    cursor.execute("UPDATE compras SET id=%s, data=%s, id_caixa=%s, forma_pagamento=%s",
-                   ({data['id'], data['data'], data['id_caixa'], data['prazo'], data['forma_pagamento'], id}))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro atualizado com sucesso'})
+def edit_by_id_compras_route(id):
+    return edit_by_id_compras(mydb, cursor, id)
 
 # Excluir um item das compras
 
 
 @app.route('/compras/<int:id>', methods=['DELETE'])
-def delete_by_id_compras(id):
-    cursor.execute("DELETE FROM compras WHERE id = %s", (id,))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro excluído com sucesso'})
+def delete_by_id_compras_route(id):
+    return delete_by_id_compras(mydb, cursor, id)
 
 
 ################################### ROTAS DE COMPRAS ITENS ###################################
