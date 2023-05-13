@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import mysql.connector
 from routes.cardapio import delete_by_id_cardapio, edit_by_id_cardapio, get_cardapio, get_by_id_cardapio, post_cardapio
+from routes.caixa import delete_by_id_caixa, edit_by_id_caixa, get_caixa, get_by_id_caixa, post_caixa
 
 
 try:
@@ -59,55 +60,39 @@ def delete_by_id_cardapio_route(id):
 
 ################################### ROTAS DE CAIXA ###################################
 
-# Todos itens do caixa
+#  GET ALL
 
 @app.route('/caixa', methods=['GET'])
-def get_caixa():
-    cursor.execute("SELECT * FROM caixa")
-    result = cursor.fetchall()
-    return jsonify(result)
+def get_caixa_route():
+    return get_caixa(cursor)
 
-# Item do caixa por id
+# GET BY ID
 
 
 @app.route('/caixa/<int:id>', methods=['GET'])
-def get_by_id_caixa(id):
-    cursor.execute("SELECT * FROM caixa WHERE id = %s", (id,))
-    item = cursor.fetchone()
-    if item is None:
-        return jsonify({'mensagem': 'Registro não encontrado'}), 404
-    return jsonify(item)
+def get_by_id_caixa_route(id):
+    return get_by_id_caixa(cursor, id)
 
-# Adicionar item no caixa
+# POST
 
 
 @app.route('/caixa', methods=['POST'])
-def post_caixa():
-    data = request.get_json()
-    cursor.execute("INSERT INTO caixa (id, operacao) VALUES (%s, %s)",
-                   (data['id'], data['operacao'],))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro adicionado com sucesso ao caixa'})
+def post_caixa_route():
+    return post_caixa(mydb, cursor)
 
-# Atualizar um item do caixa
+# PUT
 
 
 @app.route('/caixa/<int:id>', methods=['PUT'])
-def edit_by_id_caixa(id):
-    data = request.get_json()
-    cursor.execute("UPDATE caixa SET id=%s, operacao=%s,",
-                   (data['id'], data['operacao'], id))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro atualizado com sucesso'})
+def edit_by_id_caixa_route(id):
+    return edit_by_id_caixa(mydb, cursor, id)
 
-# Excluir um item do caixa
+# DELETE
 
 
 @app.route('/caixa/<int:id>', methods=['DELETE'])
-def delete_by_id_caixa(id):
-    cursor.execute("DELETE FROM caixa WHERE id = %s", (id,))
-    mydb.commit()
-    return jsonify({'mensagem': 'Registro excluído com sucesso'})
+def delete_by_id_caixa_route(id):
+    return delete_by_id_caixa(mydb, cursor, id)
 
 
 ################################### ROTAS DE VENDAS ###################################
