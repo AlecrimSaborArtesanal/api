@@ -212,35 +212,34 @@ def delete_by_id_estoque_lote_route(id):
 
 ################################### ROTAS DE COMPRAS ###################################
 
-# Todos os itens de compras
-
+# GET ALL
 
 @app.route('/compras', methods=['GET'])
 def get_compras_route():
     return get_compras(cursor)
 
-# Item de compras por id
+# GET BY ID
 
 
 @app.route('/compras/<int:id>', methods=['GET'])
 def get_by_id_compras_route(id):
     return get_by_id_compras(cursor, id)
 
-# Adicionar item em compras
+# POST
 
 
 @app.route('/compras', methods=['POST'])
 def post_compras_route():
     return post_compras(mydb, cursor)
 
-# Atualizar item em compras
+# PUT
 
 
 @app.route('/compras/<int:id>', methods=['PUT'])
 def edit_by_id_compras_route(id):
     return edit_by_id_compras(mydb, cursor, id)
 
-# Excluir um item das compras
+# DELETE
 
 
 @app.route('/compras/<int:id>', methods=['DELETE'])
